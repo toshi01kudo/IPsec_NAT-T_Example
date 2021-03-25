@@ -1,0 +1,11 @@
+version 15.2
+!
+hostname R3
+!
+interface FastEthernet0/0
+ description *** To_R2 ***
+ ip address 1.0.0.3 255.255.255.0
+!
+interface FastEthernet0/1
+ description *** To_R4 ***
+ ip address 2.0.0.3 255.255.255.0
