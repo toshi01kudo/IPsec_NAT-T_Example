@@ -1,0 +1,37 @@
+version 15.2
+!
+hostname R1
+!
+crypto isakmp policy 1
+ encr 3des
+ authentication pre-share
+ lifetime 3600
+crypto isakmp key TEST15 address 2.0.0.4
+!
+!
+crypto ipsec transform-set ESP1 esp-3des esp-sha-hmac
+ mode tunnel
+!
+crypto ipsec profile TUNNEL
+ set security-association lifetime seconds 600
+ set transform-set ESP1
+!
+interface Tunnel15
+ description ## To_WAN ##
+ ip address 172.24.15.1 255.255.255.0
+ ip mtu 1400
+ load-interval 30
+ tunnel source 192.168.0.1
+ tunnel mode ipsec ipv4
+ tunnel destination 2.0.0.4
+ tunnel protection ipsec profile TUNNEL
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+!
+interface FastEthernet0/1
+ description *** To_GW ***
+ ip address 192.168.0.1 255.255.255.0
+!
+ip route 0.0.0.0 0.0.0.0 FastEthernet0/1 192.168.0.254 name Default_RT
